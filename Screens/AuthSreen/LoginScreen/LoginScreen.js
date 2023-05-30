@@ -1,4 +1,6 @@
+
 import { useState } from "react";
+
 import {
   ImageBackground,
   Keyboard,
@@ -9,18 +11,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import * as Font from "expo-font";
-import AppLoading from "expo-app-loading";
-const fontsLoader = async () => {
-  await Font.loadAsync({
-    RobotoBoold: require("../../../assets/fonts/Roboto-Bold.ttf"),
-    RobotoMediun: require("../../../assets/fonts/Roboto-Medium.ttf"),
-    RobotoRegular: require("../../../assets/fonts/Roboto-Regular.ttf"),
-  });
-};
-
-export default function App() {
-  const [isReady, setIsReady] = useState(false);
+import styles from "./LoginScreen.style";
+export default function LoginScreeen({ navigation }) {
   const [isShowekeybord, setisShowekeybord] = useState(false);
   const [isShowePassWord, setisShowePassWord] = useState(true);
 
@@ -32,23 +24,15 @@ export default function App() {
     setisShowekeybord(false);
   };
   const submitForm = () => {
-
     console.log(userEmail);
     console.log(userPassWord);
-    
+    navigation.navigate("HomeScreen", {
+      userEmail,
+      userPassWord,
+    });
     setUserEmail("");
     setUserPassWord("");
   };
-  if (!isReady) {
-    return (
-      <AppLoading
-        startAsync={fontsLoader}
-        onFinish={() => setIsReady(true)}
-        onError={console.warn}
-      />
-    );
-  }
-
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -58,11 +42,10 @@ export default function App() {
       <View style={styles.container}>
         <ImageBackground
           style={styles.background_images}
-          source={require("./Screens/images/photoBG.jpg")}
+          source={require("../../../Screens/images/photoBG.jpg")}
         >
           <View style={styles.back_container}>
             <KeyboardAvoidingView style={styles.form_container}>
-            
               <Text style={styles.title}> Увійти </Text>
 
               <TextInput
@@ -84,7 +67,6 @@ export default function App() {
                   secureTextEntry={isShowePassWord}
                   onFocus={() => {
                     setisShowekeybord(true);
-                                
                   }}
                   onBlur={() => {
                     setisShowekeybord(false);
@@ -119,9 +101,17 @@ export default function App() {
                 style={styles.btnSingUp}
                 onPress={() => submitForm()}
               >
-                <Text style={styles.btnText}>Увійти</Text>
+                <TouchableOpacity>
+                  <Text style={styles.btnText}>Увійти</Text>
+                </TouchableOpacity>
               </TouchableOpacity>
-              <Text style={styles.loginScren}>Немає акаунту? Зареєструватися</Text>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Registration")}
+              >
+                <Text style={styles.loginScren}>
+                  Немає акаунту? Зареєструватися
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </ImageBackground>

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native/types";
+import { StyleSheet } from "react-native";
 
 
 const styles = StyleSheet.create({
@@ -123,3 +123,4 @@ const styles = StyleSheet.create({
       //todo
     },
   });
+  export default styles

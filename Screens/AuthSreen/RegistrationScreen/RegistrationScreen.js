@@ -4,25 +4,15 @@ import {
   ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
-  
   Text,
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import * as Font from "expo-font";
-import styles from "./RegistrationSreen.style"
-import AppLoading from "expo-app-loading";
-const fontsLoader = async () => {
-  await Font.loadAsync({
-    RobotoBoold: require("../../../assets/fonts/Roboto-Bold.ttf"),
-    RobotoMediun: require("../../../assets/fonts/Roboto-Medium.ttf"),
-    RobotoRegular: require("../../../assets/fonts/Roboto-Regular.ttf"),
-  });
-};
+import styles from "./RegistrationSreen.style";
 
-export default function RegistrationScreen() {
+export default function RegistrationScreen({ navigation }) {
   const [isReady, setIsReady] = useState(false);
   const [isShowekeybord, setisShowekeybord] = useState(false);
   const [isShowePassWord, setisShowePassWord] = useState(true);
@@ -38,20 +28,15 @@ export default function RegistrationScreen() {
     console.log(userName);
     console.log(userEmail);
     console.log(userPassWord);
+    navigation.navigate("HomeScreen", {
+      userName,
+      userEmail,
+      userPassWord,
+    })
     setUserName("");
     setUserEmail("");
     setUserPassWord("");
   };
-  if (!isReady) {
-    return (
-      <AppLoading
-        startAsync={fontsLoader}
-        onFinish={() => setIsReady(true)}
-        onError={console.warn}
-      />
-    );
-  }
-
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -61,14 +46,14 @@ export default function RegistrationScreen() {
       <View style={styles.container}>
         <ImageBackground
           style={styles.background_images}
-          source={require("./Screens/images/photoBG.jpg")}
+          source={require("../../../Screens/images/photoBG.jpg")}
         >
           <View style={styles.back_container}>
             <KeyboardAvoidingView style={styles.form_container}>
               <View>
                 <Image
                   style={styles.userphoto}
-                  source={require("./Screens/images/rectangle.jpg")}
+                  source={require("../../../Screens/images/rectangle.jpg")}
                 />
               </View>
               <Text style={styles.title}> Реєстрація </Text>
@@ -106,7 +91,6 @@ export default function RegistrationScreen() {
                   secureTextEntry={isShowePassWord}
                   onFocus={() => {
                     setisShowekeybord(true);
-                                
                   }}
                   onBlur={() => {
                     setisShowekeybord(false);
@@ -143,7 +127,9 @@ export default function RegistrationScreen() {
               >
                 <Text style={styles.btnText}>Зареєстуватися</Text>
               </TouchableOpacity>
-              <Text style={styles.loginScren}>Вже є акаунт? Увійти</Text>
+              <TouchableOpacity   onPress={() => navigation.navigate("Login")} >
+                <Text style={styles.loginScren}>Вже є акаунт? Увійти</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </ImageBackground>

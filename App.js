@@ -1,18 +1,15 @@
 import { useState } from "react";
-import {
-  Image,
-  ImageBackground,
-  Keyboard,
-  KeyboardAvoidingView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
 import * as Font from "expo-font";
+import "react-native-gesture-handler";
 import AppLoading from "expo-app-loading";
+
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import LoginScreeen from "./Screens/AuthSreen/LoginScreen/LoginScreen";
+import RegistrationScreen from "./Screens/AuthSreen/RegistrationScreen/RegistrationScreen";
+import HomeScreen from "./Screens/MainScreen/HomeScreen/HomeScreen";
+
+
 const fontsLoader = async () => {
   await Font.loadAsync({
     RobotoBoold: require("./assets/fonts/Roboto-Bold.ttf"),
@@ -21,26 +18,12 @@ const fontsLoader = async () => {
   });
 };
 
+const MainStack = createStackNavigator();
+
 export default function App() {
   const [isReady, setIsReady] = useState(false);
-  const [isShowekeybord, setisShowekeybord] = useState(false);
-  const [isShowePassWord, setisShowePassWord] = useState(true);
+  const [auth, setAuth] = useState(true);
 
-  const [userEmail, setUserEmail] = useState("");
-  const [userPassWord, setUserPassWord] = useState("");
-
-  const keybordHiden = () => {
-    Keyboard.dismiss();
-    setisShowekeybord(false);
-  };
-  const submitForm = () => {
-
-    console.log(userEmail);
-    console.log(userPassWord);
-    
-    setUserEmail("");
-    setUserPassWord("");
-  };
   if (!isReady) {
     return (
       <AppLoading
@@ -52,184 +35,54 @@ export default function App() {
   }
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        keybordHiden();
-      }}
-    >
-      <View style={styles.container}>
-        <ImageBackground
-          style={styles.background_images}
-          source={require("./Screens/images/photoBG.jpg")}
-        >
-          <View style={styles.back_container}>
-            <KeyboardAvoidingView style={styles.form_container}>
-            
-              <Text style={styles.title}> Увійти </Text>
-
-              <TextInput
-                onFocus={() => {
-                  setisShowekeybord(true);
-                }}
-                onBlur={() => {
-                  setisShowekeybord(false);
-                }}
-                onChangeText={(value) => {
-                  setUserEmail(value);
-                }}
-                value={userEmail}
-                placeholder="Адреса електронної пошти"
-                style={styles.emailInput}
-              />
-              <View style={styles.inputPassWordConteiner}>
-                <TextInput
-                  secureTextEntry={isShowePassWord}
-                  onFocus={() => {
-                    setisShowekeybord(true);
-                                
-                  }}
-                  onBlur={() => {
-                    setisShowekeybord(false);
-                  }}
-                  onChangeText={(value) => {
-                    setUserPassWord(value);
-                  }}
-                  value={userPassWord}
-                  placeholder="Пароль"
-                  style={styles.passwordInput}
-                />
-
-                <Text
-                  style={styles.bntShowePassword}
-                  onPress={() => {
-                    setisShowePassWord(!isShowePassWord);
-                  }}
-                >
-                  Показати
-                </Text>
-              </View>
-            </KeyboardAvoidingView>
-            <View
-              id="btncontainer"
-              style={{
-                ...styles.btncontainer,
-                marginBottom: isShowekeybord ? -150 : 0,
-              }}
-            >
+    <NavigationContainer>
+      <MainStack.Navigator>
+        <MainStack.Screen
+          name="Login"
+          component={LoginScreeen}
+          options={{ headerShown: false }}
+        />
+        <MainStack.Screen
+          name="Registration"
+          component={RegistrationScreen}
+          options={{ headerShown: false }}
+        />
+         <MainStack.Screen options={{ headerShown: false }} name="HomeScreen" component={HomeScreen}/>
+        {/* <MainStack.Screen
+          name="PostScreen"
+          component={PostsScreen}
+          options={{
+            headerTitleAlign: "center",
+            headerRight: () => (
               <TouchableOpacity
-                activeOpacity={0.7}
-                style={styles.btnSingUp}
-                onPress={() => submitForm()}
+                onPress={() => {console.log("TODO")}}
+                style={{ marginRight: 10 }}
               >
-                <Text style={styles.btnText}>Увійти</Text>
+                <Image
+                  style={{ width: 24, height: 24 }}
+                  source={require("./Screens/images/log_out.png")}
+                />
               </TouchableOpacity>
-              <Text style={styles.loginScren}>Немає акаунту? Зареєструватися</Text>
-            </View>
-          </View>
-        </ImageBackground>
-      </View>
-    </TouchableWithoutFeedback>
+            ),
+            title: "Публікації",
+            headerTitleStyle: {
+              backgroundColor: "#fff",
+              fontFamily: "RobotoMediun",
+              fontSize: 17,
+            },
+          }}
+        /> */}
+        {/* <MainStack.Screen
+          name="CreatePostsScreen"
+          component={CreatePostsScreen}
+          options={{ title: "Створити публікацію" }}
+        /> */}
+        {/* <MainStack.Screen
+          name="ProfileScreen"
+          component={ProfileScreen}
+          options={{ headerShown: false }}
+        /> */}
+      </MainStack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    backgroundColor: "#fff",
-  },
-  background_images: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    resizeMode: "cover",
-  },
-  back_container: {
-    marginTop: "auto",
-    justifyContent: "flex-end",
-  },
-  form_container: {
-    backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-  },
-
-  title: {
-    fontFamily: "RobotoMediun",
-    fontSize: 35,
-    fontWeight: "bold",
-    marginTop: 92,
-    marginLeft: "auto",
-    marginRight: "auto",
-    //TODO
-  },
-  emailInput: {
-    fontFamily: "RobotoRegular",
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#FF6C00",
-    marginTop: 16,
-    marginHorizontal: 16,
-    padding: 16,
-    height: 50,
-  },
-
-  passwordInput: {
-    fontFamily: "RobotoRegular",
-
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#FF6C00",
-    marginTop: 16,
-    marginHorizontal: 16,
-    padding: 16,
-    height: 50,
-  },
-  bntShowePassword: {
-    fontFamily: "RobotoRegular",
-    backgroundColor: "#fff",
-    position: "absolute",
-    top: 30,
-    right: 30,
-    color: "#1B4371",
-    fontSize: 16,
-    fontWeight: 400,
-  },
-
-  btnSingUp: {
-    fontFamily: "RobotoRegular",
-    height: 51,
-    marginHorizontal: 16,
-    backgroundColor: "#FF6C00",
-    marginTop: 41,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  btnText: {
-    fontFamily: "RobotoRegular",
-    color: "#FFFFFF",
-  },
-  btncontainer: {
-    marginBottom: -150,
-    backgroundColor: "#fff",
-    justifyContent: "flex-end",
-  },
-  loginScren: {
-    fontFamily: "RobotoRegular",
-    marginLeft: "auto",
-    marginRight: "auto",
-    fontStyle: "normal",
-    fontSize: 16,
-    fontWeight: 400,
-    paddingBottom: 66,
-    color: "#1B4371",
-    //todo
-  },
-});
