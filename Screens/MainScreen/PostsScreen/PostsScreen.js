@@ -8,7 +8,8 @@ const user = {
   email: "Geraldine_Fay@gmail.com",
   id: "1",
 };
-const PostsScreen = () => {
+const PostsScreen = ({navigation}) => {
+  console.log(navigation)
   return (
     <View style={styles.conteiner}>
     <View style={styles.conteineruser}>
