@@ -25,9 +25,6 @@ const CreatePostsScreen = ({ navigation }) => {
 
     let location = await Location.getCurrentPositionAsync();
     setLocation(location);
-    // console.log("photo", photo);
-    // console.log("location", location);
-   
     let keys = {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
@@ -35,13 +32,13 @@ const CreatePostsScreen = ({ navigation }) => {
 
     const place = await Location.reverseGeocodeAsync(keys);
     place.find((p) => p.city);
-    console.log(...place)
+
     const {country,region}=place[0]
      setAdress({country,region})
     
   };
   const createAddres=()=>{
-    console.log(adress)
+
    if(adress){
     return `${adress.region},${adress.country}`
    }
@@ -59,7 +56,7 @@ const CreatePostsScreen = ({ navigation }) => {
     setTitle("")
   }
   const postsend=()=>{
-   navigation.navigate("PostScreen",{photo,title,adress,location})
+   navigation.navigate("NestedPostScreen",{photo,title,adress,location})
   }
   return (
     <View style={styles.conteiner}>

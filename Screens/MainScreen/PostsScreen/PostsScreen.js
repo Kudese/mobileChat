@@ -1,25 +1,20 @@
-import { Image, Text, View } from "react-native";
-import styles from "./PostsScreen.style";
-const user = {
-  createdAt: "2023-05-29T21:24:01.039Z",
-  name: "Laurie Steuber",
-  avatar:
-    "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/842.jpg",
-  email: "Geraldine_Fay@gmail.com",
-  id: "1",
-};
-const PostsScreen = ({navigation}) => {
-  console.log(navigation)
+import { createStackNavigator } from "@react-navigation/stack";
+import CommentsScreen from "../NestedScreen/CommentsScreen/CommentsScreen";
+import MapScreen from "../NestedScreen/MapScreen/MapScreen";
+import NestedPostScreen from "../NestedScreen/NestedPostScreen/NestedPostScreen";
+
+const NesedScreen = createStackNavigator();
+const PostsScreen = () => {
   return (
-    <View style={styles.conteiner}>
-    <View style={styles.conteineruser}>
-      <Image style={styles.userphoto} source={{uri:user.avatar}} />
-      <View style={styles.textcontainer}>
-        <Text style={styles.username}>{user.name}</Text>
-        <Text style={styles.useremail}>{user.email}</Text>
-      </View>
-    </View>
-    </View>
+    <NesedScreen.Navigator>
+      <NesedScreen.Screen
+        name="NestedPostScreen"
+        component={NestedPostScreen}
+        options={{ headerShown: false }}
+      />
+      <NesedScreen.Screen name="CommentScreen" component={CommentsScreen} />
+      <NesedScreen.Screen name="MapScreen" component={MapScreen} />
+    </NesedScreen.Navigator>
   );
 };
 
