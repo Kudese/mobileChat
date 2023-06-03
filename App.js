@@ -48,40 +48,6 @@ export default function App() {
           options={{ headerShown: false }}
         />
          <MainStack.Screen options={{ headerShown: false }} name="HomeScreen" component={HomeScreen}/>
-        {/* <MainStack.Screen
-          name="PostScreen"
-          component={PostsScreen}
-          options={{
-            headerTitleAlign: "center",
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() => {console.log("TODO")}}
-                style={{ marginRight: 10 }}
-              >
-                <Image
-                  style={{ width: 24, height: 24 }}
-                  source={require("./Screens/images/log_out.png")}
-                />
-              </TouchableOpacity>
-            ),
-            title: "Публікації",
-            headerTitleStyle: {
-              backgroundColor: "#fff",
-              fontFamily: "RobotoMediun",
-              fontSize: 17,
-            },
-          }}
-        /> */}
-        {/* <MainStack.Screen
-          name="CreatePostsScreen"
-          component={CreatePostsScreen}
-          options={{ title: "Створити публікацію" }}
-        /> */}
-        {/* <MainStack.Screen
-          name="ProfileScreen"
-          component={ProfileScreen}
-          options={{ headerShown: false }}
-        /> */}
       </MainStack.Navigator>
     </NavigationContainer>
   );
