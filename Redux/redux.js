@@ -25,7 +25,6 @@ import { auth } from "../FireBase/config";
 export const loginThunk = createAsyncThunk(
   "login",
   async ({ userEmail, userPassWord }) => {
-   
     const data = await loginDB({ userEmail, userPassWord });
     return data;
   }
@@ -34,10 +33,9 @@ export const loginThunk = createAsyncThunk(
 export const registrationThunk = createAsyncThunk(
   "registration",
   async ({ userEmail, userPassWord, userName }) => {
-  
     const data = await registerDB({ userEmail, userPassWord });
-    const user = await updateUserProfile( {displayName:userName})
-   
+    const user = await updateUserProfile({ displayName: userName });
+
     return data;
   }
 );
@@ -48,42 +46,33 @@ export const logoutThunk = createAsyncThunk("logout", async () => {
 const slice = createSlice({
   name: "redux",
   initialState: {
-    name: "",
-    userid: "",
-    userEmail: "",
-    photoURL: "",
-    accessToken: null,
+    name: null,
+    userid: null,
+    userEmail: null,
+    photoURL: null,
   },
   extraReducers: (builder) => {
     builder
       .addCase(loginThunk.fulfilled, (state, { payload }) => {
-   
         state.userid = payload.uid;
         state.name = payload.displayName;
         state.photoURL = payload.photoURL;
-        state.accessToken = payload.stsTokenManager.accessToken;
         state.userEmail = payload.email;
       })
-      .addCase(loginThunk.rejected, (state, data) => {
-   
-      })
+      .addCase(loginThunk.rejected, (state, data) => {})
       .addCase(registrationThunk.fulfilled, (state, { payload }) => {
-
-        state.accessToken = payload._tokenResponse.idToken;
-        state.userEmail = payload._tokenResponse.email;
-        state.name = payload.user.displayName;
         state.userid = payload.user.uid;
+        state.name = payload.user.displayName;
         state.photoURL = payload.user.photoURL;
+        state.userEmail = payload._tokenResponse.email;
       })
       .addCase(logoutThunk.fulfilled, (state, data) => {
-
-       return state = {
-          name: "",
-          userid: "",
-          userEmail: "",
-          photoURL: "",
-          accessToken: null,
-        };
+        return (state = {
+          name: null,
+          userid: null,
+          userEmail: null,
+          photoURL: null,
+        });
       });
   },
 });
@@ -98,11 +87,10 @@ const reducer = persistReducer(persistConfig, slice.reducer);
 export const store = configureStore({
   reducer,
   preloadedState: {
-    name: "",
-    userid: "",
-    userEmail: "",
-    photoURL: "",
-    accessToken: null,
+    name: null,
+    userid: null,
+    userEmail: null,
+    photoURL: null,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

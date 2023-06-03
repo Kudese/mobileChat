@@ -5,6 +5,7 @@ import styles from "./NestedPostScreen.style";
 import { useSelector } from "react-redux"
 import { collection, getDocs } from 'firebase/firestore'; 
 import { db } from "../../../../FireBase/config";
+
 const user = {
   createdAt: "2023-05-29T21:24:01.039Z",
   name: "Laurie Steuber",
@@ -13,40 +14,28 @@ const user = {
   email: "Geraldine_Fay@gmail.com",
   id: "1",
 };
+
+
 const NestedPostScreen = ({ route,navigation }) => {
   const [posts, setPosts] = useState([]);
-  const email = useSelector(state=>state.userEmail)
-  const name = useSelector(state=>state.name)
-  const userphoto = useSelector(state=>state.photoURL)
+  const email = useSelector(state => state.userEmail);
+  const name = useSelector(state => state.name);
+  const userphoto = useSelector(state => state.photoURL);
+
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [
-        ...prevState,
-        {
-          adress: route.params.adress,
-          photo: route.params.photo,
-          title: route.params.title,
-        },
-      ]);
-    }
-  }, [route.params]);
-
-
-  const getDataFromFirestore = async () => {
+    const getDataFromFirestore = async () => {
       try {
-        const snapshot = await getDocs(collection(db, 'users'));
-              // Перевіряємо у консолі отримані дані
-        snapshot.forEach((doc) => console.log(`${doc.id} =>`, doc.data()));
-              // Повертаємо масив обʼєктів у довільній формі
-              return snapshot.map((doc) => ({ id: doc.id, data: doc.data() }))
+        const snapshot = await getDocs(collection(db, 'posts'));
+        const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        setPosts(data);
       } catch (error) {
         console.log(error);
-              throw error;
+        throw error;
       }
     };
 
-getDataFromFirestore()
-
+    getDataFromFirestore();
+  }, []);
 
   return (
     <View style={styles.conteiner}>
@@ -71,19 +60,19 @@ getDataFromFirestore()
           >
     
             <Image
-              source={{ uri: item.photo }}
+              source={{ uri: item.urlPhoto }}
               style={{ width: 350, height: 200 }}
             />
             <View>
               <Text style={styles.legendatext}>{item.title}</Text>
               <View style={styles.legenda}>
-                <TouchableOpacity onPress={()=>{navigation.navigate("CommentScreen",{photo:item.photo,title:item.title})}} style={styles.cometns}>
+                <TouchableOpacity onPress={()=>{navigation.navigate("CommentScreen",{photo:item.urlPhoto,title:item.title, idpost:item.id})}} style={styles.cometns}>
                   <Image
                     style={{ width: 18, height: 18 }}
                     source={require("../../../images/Shape.png")}
                   /><Text style={{marginLeft:4}}>0</Text>
                 </TouchableOpacity>
-                  <TouchableOpacity onPress={()=>{navigation.navigate("MapScreen",{ location:route.params.location})}} >
+                  <TouchableOpacity onPress={()=>{navigation.navigate("MapScreen",{ location:item.location})}} >
                 <Text>
 
                   <Image

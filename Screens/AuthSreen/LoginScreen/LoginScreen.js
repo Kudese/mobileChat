@@ -19,10 +19,11 @@ export default function LoginScreeen({ navigation }) {
 
   const [userEmail, setUserEmail] = useState("");
   const [userPassWord, setUserPassWord] = useState("");
-  const token = useSelector((state) => state.accessToken);
+  const userid = useSelector((state) => state.userid);
+  console.log("userid",userid)
   const dispatch = useDispatch();
 
-  if (token) {
+  if (userid) {
     navigation.navigate("HomeScreen");
   }
 

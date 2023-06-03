@@ -14,8 +14,11 @@ const CreatePostsScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
   const [camera, setCamera] = useState(null);
   const [photo, setPhoto] = useState(null);
-  const userId = useSelector((state) => state.userId);
+  const userId = useSelector((state) => state.userid);
   const [status, requestPermission] = Camera.useCameraPermissions();
+  
+  console.log("userId",userId)
+  
   const takePhoto = async () => {
     requestPermission();
 
@@ -89,6 +92,21 @@ const CreatePostsScreen = ({ navigation }) => {
       async () => {
         try {
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          console.log({
+            title,
+            adress,
+            location,
+            userId,
+            urlPhoto: downloadURL
+          })
+          writeDataToFirestore({
+            title,
+            adress,
+            location,
+            userId,
+            urlPhoto: downloadURL,
+            idPhoto: Date.now().toString()
+          });
         } catch (error) {
           console.log("Error:", error);
         }
@@ -99,7 +117,7 @@ const CreatePostsScreen = ({ navigation }) => {
   const writeDataToFirestore = async (data) => {
 
     try {
-      const docRef = await addDoc(collection(db, "users"), data);
+      const docRef = await addDoc(collection(db, "posts"), data);
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -109,11 +127,7 @@ const CreatePostsScreen = ({ navigation }) => {
 
   const postsend = async () => {
     uploadPhoto();
-    writeDataToFirestore({
-      title:"sadas",
-      location:"asdas",
-      userId:"sdad",
-    });
+   
     await navigation.navigate("NestedPostScreen", {
       photo,
       title,

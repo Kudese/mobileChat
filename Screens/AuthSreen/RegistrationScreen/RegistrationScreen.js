@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import {
@@ -21,7 +21,10 @@ export default function RegistrationScreen({ navigation }) {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassWord, setUserPassWord] = useState("");
-  const token = useSelector((state) => state.accessToken);
+  const userid = useSelector((state) => {return state.userid});
+  const state  = useSelector(state=>state)
+  console.log("state",state)
+  console.log("userId",userid)
   const dispatch = useDispatch();
   const keybordHiden = () => {
     Keyboard.dismiss();
@@ -35,9 +38,10 @@ export default function RegistrationScreen({ navigation }) {
     setUserPassWord("");
   };
 
-  if (token) {
-    navigation.navigate("HomeScreen");
+  if (userid) {
+  navigation.navigate("HomeScreen");
   }
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
