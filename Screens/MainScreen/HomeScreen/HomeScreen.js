@@ -3,9 +3,19 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import PostsScreen from "../PostsScreen/PostsScreen";
 import CreatePostsScreen from "../CreatePostsScreen/CreatePostsScreen";
 import ProfileScreen from "../ProfileScreen/ProfileScreen";
+import { useDispatch } from "react-redux";
+
+import { logoutThunk } from "../../../Redux/redux";
 const TabStack = createBottomTabNavigator();
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
+ const dispatch = useDispatch()
+
+  const logout=()=>{
+    
+dispatch(logoutThunk())
+navigation.navigate("Login")
+  }
   return (
     <TabStack.Navigator tabBarOptions={{ showLabel: false }}>
       <TabStack.Screen
@@ -25,7 +35,7 @@ const HomeScreen = () => {
           headerRight: () => (
             <TouchableOpacity
               onPress={() => {
-                console.log("TODO");
+                logout();
               }}
               style={{ marginRight: 10 }}
             >

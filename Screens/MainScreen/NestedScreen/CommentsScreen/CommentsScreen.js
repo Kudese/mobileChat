@@ -17,7 +17,7 @@ const CommentsScreen = ({ route }) => {
   const sendFeadBack = () => {
     setComents((prevState) => [...prevState, {title:feadBack}]);
     setFeatBack("");
-    console.log(coments);
+
   };
   return (
     <View style={{backgroundColor:"#eee"}}>

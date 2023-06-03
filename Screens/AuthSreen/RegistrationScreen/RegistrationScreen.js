@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   Image,
   ImageBackground,
@@ -10,33 +12,32 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import styles from "./RegistrationSreen.style";
 
+import styles from "./RegistrationSreen.style";
+import { registrationThunk } from "../../../Redux/redux";
 export default function RegistrationScreen({ navigation }) {
-  const [isReady, setIsReady] = useState(false);
   const [isShowekeybord, setisShowekeybord] = useState(false);
   const [isShowePassWord, setisShowePassWord] = useState(true);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassWord, setUserPassWord] = useState("");
-
+  const token = useSelector((state) => state.accessToken);
+  const dispatch = useDispatch();
   const keybordHiden = () => {
     Keyboard.dismiss();
     setisShowekeybord(false);
   };
   const submitForm = () => {
-    console.log(userName);
-    console.log(userEmail);
-    console.log(userPassWord);
-    navigation.navigate("HomeScreen", {
-      userName,
-      userEmail,
-      userPassWord,
-    })
+    dispatch(registrationThunk({ userEmail, userPassWord, userName }));
+
     setUserName("");
     setUserEmail("");
     setUserPassWord("");
   };
+
+  if (token) {
+    navigation.navigate("HomeScreen");
+  }
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -127,7 +128,7 @@ export default function RegistrationScreen({ navigation }) {
               >
                 <Text style={styles.btnText}>Зареєстуватися</Text>
               </TouchableOpacity>
-              <TouchableOpacity   onPress={() => navigation.navigate("Login")} >
+              <TouchableOpacity onPress={() => navigation.navigate("Login")}>
                 <Text style={styles.loginScren}>Вже є акаунт? Увійти</Text>
               </TouchableOpacity>
             </View>

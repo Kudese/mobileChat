@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-
+import { useDispatch } from "react-redux";
 import {
   ImageBackground,
   Keyboard,
@@ -12,24 +11,31 @@ import {
   View,
 } from "react-native";
 import styles from "./LoginScreen.style";
+import { loginThunk } from "../../../Redux/redux";
+import { useSelector } from "react-redux";
 export default function LoginScreeen({ navigation }) {
   const [isShowekeybord, setisShowekeybord] = useState(false);
   const [isShowePassWord, setisShowePassWord] = useState(true);
 
   const [userEmail, setUserEmail] = useState("");
   const [userPassWord, setUserPassWord] = useState("");
+  const token = useSelector((state) => state.accessToken);
+  const dispatch = useDispatch();
+
+  if (token) {
+    navigation.navigate("HomeScreen");
+  }
 
   const keybordHiden = () => {
     Keyboard.dismiss();
     setisShowekeybord(false);
   };
+
   const submitForm = () => {
-    console.log(userEmail);
-    console.log(userPassWord);
-    navigation.navigate("HomeScreen", {
-      userEmail,
-      userPassWord,
-    });
+
+    dispatch(loginThunk({ userEmail, userPassWord }));
+
+
     setUserEmail("");
     setUserPassWord("");
   };

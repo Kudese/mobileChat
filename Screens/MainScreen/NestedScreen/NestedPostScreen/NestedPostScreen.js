@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { FlatList, Image, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import styles from "./NestedPostScreen.style";
+import { useSelector } from "react-redux"
+import { collection, getDocs } from 'firebase/firestore'; 
+import { db } from "../../../../FireBase/config";
 const user = {
   createdAt: "2023-05-29T21:24:01.039Z",
   name: "Laurie Steuber",
@@ -11,14 +14,10 @@ const user = {
   id: "1",
 };
 const NestedPostScreen = ({ route,navigation }) => {
-  const [posts, setPosts] = useState([
-    {
-      adress: { country: "Україна", region: "Дніпропетровська область" },
-      photo:
-        "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FmobileChat-243b868f-901f-4ccd-9e44-93af081fd69b/Camera/fd329d86-67a2-4771-a767-3e0c58057456.jpg",
-      title: "Про",
-    },
-  ]);
+  const [posts, setPosts] = useState([]);
+  const email = useSelector(state=>state.userEmail)
+  const name = useSelector(state=>state.name)
+  const userphoto = useSelector(state=>state.photoURL)
   useEffect(() => {
     if (route.params) {
       setPosts((prevState) => [
@@ -32,13 +31,30 @@ const NestedPostScreen = ({ route,navigation }) => {
     }
   }, [route.params]);
 
+
+  const getDataFromFirestore = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, 'users'));
+              // Перевіряємо у консолі отримані дані
+        snapshot.forEach((doc) => console.log(`${doc.id} =>`, doc.data()));
+              // Повертаємо масив обʼєктів у довільній формі
+              return snapshot.map((doc) => ({ id: doc.id, data: doc.data() }))
+      } catch (error) {
+        console.log(error);
+              throw error;
+      }
+    };
+
+getDataFromFirestore()
+
+
   return (
     <View style={styles.conteiner}>
       <View style={styles.conteineruser}>
-        <Image style={styles.userphoto} source={{ uri: user.avatar }} />
+        <Image style={styles.userphoto} source={{ uri: userphoto || user.avatar }} />
         <View style={styles.textcontainer}>
-          <Text style={styles.username}>{user.name}</Text>
-          <Text style={styles.useremail}>{user.email}</Text>
+          <Text style={styles.username}>{name}</Text>
+          <Text style={styles.useremail}>{email}</Text>
         </View>
       </View>
       <FlatList
@@ -53,7 +69,7 @@ const NestedPostScreen = ({ route,navigation }) => {
               alignItems: "center",
             }}
           >
-            {console.log("post", posts)}
+    
             <Image
               source={{ uri: item.photo }}
               style={{ width: 350, height: 200 }}
