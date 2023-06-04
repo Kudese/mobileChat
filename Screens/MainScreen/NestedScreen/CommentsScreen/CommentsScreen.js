@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { addDoc, collection, getDocs } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -6,49 +7,92 @@ import {
   Text,
   TextInput,
   View,
+  KeyboardAvoidingView,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useSelector } from "react-redux";
+import { db } from "../../../../FireBase/config";
+
 
 const CommentsScreen = ({ route }) => {
-  const { title, photo } = route.params;
-  const [coments, setComents] = useState([]);
-  const [feadBack, setFeatBack] = useState("");
+  const { title, photo, idpost } = route.params;
+  const userid = useSelector((state) => state.userid);
+  const [comments, setComments] = useState([]);
+  const [feedback, setFeedback] = useState("");
 
-  const sendFeadBack = () => {
-    setComents((prevState) => [...prevState, {title:feadBack}]);
-    setFeatBack("");
-
+  const sendFeedback = async () => {
+    console.log("work ")
+    try {
+      const docRef = await addDoc(collection(db, "comments"), {
+        idpost: idpost,
+        owner: userid,
+        text: feedback,
+      });
+      setFeedback("");
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      throw e;
+    }
   };
+
+  useEffect(() => {
+    const getComments = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "comments"));
+        const data = [];
+        querySnapshot.forEach((doc) => {
+          data.push({ id: doc.id, ...doc.data() });
+        });
+        const filteredComments = data.filter((el) => el.idpost === idpost);
+        setComments(filteredComments);
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    };
+  
+    getComments();
+  }, []);
+
   return (
-    <View style={{backgroundColor:"#eee"}}>
+    <View style={{ backgroundColor: "#eee", flex:1 }}>
       <Image
         source={{ uri: photo }}
         style={{ width: Dimensions.get("window").width - 10, height: 150 }}
       />
-      <FlatList style={{flex:1,}}
-        data={coments}
-        keyExtractor={(item, indx) => indx.toString()}
+      <KeyboardAvoidingView style={{ 
+    backgroundColor: "#FFFFFF",
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+  }} >
+
+      <FlatList
+        style={{  marginHorizontal:10, borderColor:"#ddd" }}
+        data={comments}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => {
-          return <Text>{item.title}</Text>;
+          return <Text>{item.text}</Text>;
         }}
       />
-      <View>
+      <View style={{marginHorizontal:10}} >
         <TextInput
-          placeholder="Коментарь.."
-          value={feadBack}
+          placeholder="Коментар..."
+          value={feedback}
           onChangeText={(value) => {
-            setFeatBack(value);
+            setFeedback(value);
           }}
         />
-        <TouchableOpacity
+        <TouchableOpacity style={{borderRadius:2, fontSize:15, height:30,}}
           onPress={() => {
-            sendFeadBack();
+            sendFeedback();
           }}
         >
           <Text>Відправити</Text>
         </TouchableOpacity>
       </View>
+          </KeyboardAvoidingView>
     </View>
   );
 };
+
 export default CommentsScreen;
