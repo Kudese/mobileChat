@@ -22,60 +22,8 @@ import {
 } from "../FireBase/firebaseOperation";
 import { async } from "@firebase/util";
 import { auth } from "../FireBase/config";
-export const loginThunk = createAsyncThunk(
-  "login",
-  async ({ userEmail, userPassWord }) => {
-    const data = await loginDB({ userEmail, userPassWord });
-    return data;
-  }
-);
+import slice from "./slice";
 
-export const registrationThunk = createAsyncThunk(
-  "registration",
-  async ({ userEmail, userPassWord, userName }) => {
-    const data = await registerDB({ userEmail, userPassWord });
-    const user = await updateUserProfile({ displayName: userName });
-
-    return data;
-  }
-);
-export const logoutThunk = createAsyncThunk("logout", async () => {
-  authStateChanged();
-});
-
-const slice = createSlice({
-  name: "redux",
-  initialState: {
-    name: null,
-    userid: null,
-    userEmail: null,
-    photoURL: null,
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(loginThunk.fulfilled, (state, { payload }) => {
-        state.userid = payload.uid;
-        state.name = payload.displayName;
-        state.photoURL = payload.photoURL;
-        state.userEmail = payload.email;
-      })
-      .addCase(loginThunk.rejected, (state, data) => {})
-      .addCase(registrationThunk.fulfilled, (state, { payload }) => {
-        state.userid = payload.user.uid;
-        state.name = payload.user.displayName;
-        state.photoURL = payload.user.photoURL;
-        state.userEmail = payload._tokenResponse.email;
-      })
-      .addCase(logoutThunk.fulfilled, (state, data) => {
-        return (state = {
-          name: null,
-          userid: null,
-          userEmail: null,
-          photoURL: null,
-        });
-      });
-  },
-});
 
 const persistConfig = {
   key: "root",
