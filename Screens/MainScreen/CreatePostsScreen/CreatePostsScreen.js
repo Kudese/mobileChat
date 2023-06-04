@@ -1,13 +1,14 @@
-import { Image, Text, Touchable, View } from "react-native";
+import { Image, Text,  View } from "react-native";
 import { Camera, CameraType } from "expo-camera";
 import styles from "./CreatePostsScreen,style";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import * as Location from "expo-location";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { db, storage } from "../../../FireBase/config";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { addDoc, collection } from "@firebase/firestore";
 import { useSelector } from "react-redux";
+
 const CreatePostsScreen = ({ navigation }) => {
   const [title, setTitle] = useState("");
   const [adress, setAdress] = useState(null);
