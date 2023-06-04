@@ -1,4 +1,7 @@
- const slice = createSlice({
+import { createSlice } from "@reduxjs/toolkit";
+import { loginThunk, logoutThunk, registrationThunk } from "./asyncThunk";
+
+const slice = createSlice({
     name: "redux",
     initialState: {
       name: null,

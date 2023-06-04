@@ -1,3 +1,12 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  authStateChanged,
+  loginDB,
+  registerDB,
+  updateUserProfile,
+} from "../FireBase/firebaseOperation";
+
+
 export const loginThunk = createAsyncThunk(
     "login",
     async ({ userEmail, userPassWord }) => {

@@ -1,7 +1,5 @@
 import {
   configureStore,
-  createAsyncThunk,
-  createSlice,
 } from "@reduxjs/toolkit";
 import {
   persistReducer,
@@ -14,12 +12,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-  authStateChanged,
-  loginDB,
-  registerDB,
-  updateUserProfile,
-} from "../FireBase/firebaseOperation";
+
 import { async } from "@firebase/util";
 import { auth } from "../FireBase/config";
 import slice from "./slice";
