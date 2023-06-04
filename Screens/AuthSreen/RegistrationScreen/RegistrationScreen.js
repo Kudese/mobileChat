@@ -14,7 +14,7 @@ import {
 } from "react-native";
 
 import styles from "./RegistrationSreen.style";
-import { registrationThunk } from "../../../Redux/redux";
+import { registrationThunk } from "../../../Redux/asyncThunk";
 export default function RegistrationScreen({ navigation }) {
   const [isShowekeybord, setisShowekeybord] = useState(false);
   const [isShowePassWord, setisShowePassWord] = useState(true);

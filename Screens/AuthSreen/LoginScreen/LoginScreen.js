@@ -11,8 +11,9 @@ import {
   View,
 } from "react-native";
 import styles from "./LoginScreen.style";
-import { loginThunk } from "../../../Redux/redux";
+
 import { useSelector } from "react-redux";
+import { loginThunk } from "../../../Redux/asyncThunk";
 export default function LoginScreeen({ navigation }) {
   const [isShowekeybord, setisShowekeybord] = useState(false);
   const [isShowePassWord, setisShowePassWord] = useState(true);
